@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "**/*",
-      "use": "@vercel/static"
-    }
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/kamal", "destination": "/kamal.html" },
+    { "source": "/abhigya", "destination": "/abhigya.html" }
   ]
 }

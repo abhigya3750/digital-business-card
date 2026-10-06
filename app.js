@@ -1,12 +1,14 @@
 /* ==========================================================================
-   GFF 2026 Digital vCard Engine - LinkedIn Style Full Circle Design
+   Executive Digital Business Card Engine - Abhigya & Kamal (Grey Tone Luxe)
    ========================================================================== */
 
 const PROFILES = {
   abhigya: {
     id: "abhigya",
     name: "Abhigya Kanungo",
-    headline: "Founding Member | Open for Product & Growth Roles",
+    headline: "Product & Growth",
+    role: "Product & Growth",
+    subRole: "Founding Member @ Nerds",
     org: "Nerds (New Era Rebels for Disruptive Solutions)",
     title: "Founding Member - Product & Growth",
     phone: "+919993805217",
@@ -17,84 +19,50 @@ const PROFILES = {
     displayLinkedIn: "linkedin.com/in/abhigyakanungo",
     website: "https://nerds.co.in",
     displayWebsite: "nerds.co.in",
+    portfolio: "https://abhigya-portofolio.vercel.app/",
+    displayPortfolio: "abhigya-portofolio.vercel.app",
     initials: "AK",
     themeClass: "theme-nerds",
     photoSrc: "assets/abhigya_photo.jpg",
     logoSrc: "assets/nerds_logo.png",
     logoFallback: "NERDS",
-    pin: "3750",
-    waMessage: "Hi Abhigya, great connecting with you at Global Fintech Fest 2026! Let's catch up regarding Product & Growth opportunities."
-  },
-  rishi: {
-    id: "rishi",
-    name: "Rishi Raj",
-    headline: "Product Manager - NBBL",
-    org: "NPCI Bharat BillPay Limited (NBBL)",
-    title: "Product Manager",
-    phone: "+919165251871",
-    displayPhone: "+91 9165251871",
-    email: "rishi.raj@npci.org.in",
-    personalEmail: "",
-    linkedIn: "https://www.linkedin.com/in/rishi-raj-356ba212a",
-    displayLinkedIn: "linkedin.com/in/rishi-raj",
-    initials: "RR",
-    themeClass: "theme-npci",
-    photoSrc: "assets/rishi_photo.jpg",
-    logoSrc: "assets/npci_logo.svg",
-    logoFallback: "NPCI / NBBL",
-    pin: "9165",
-    waMessage: "Hi Rishi, great connecting with you at Global Fintech Fest 2026! Let's stay in touch."
+    waMessage: "Hi Abhigya, great connecting with you! Let's catch up and stay connected."
   },
   kamal: {
     id: "kamal",
     name: "Kamal Parihar",
-    headline: "Marketing & Growth Executive | Fintech Builder | GFF 2026",
+    headline: "Marketing & Growth Executive | Fingpay",
+    role: "Marketing & Growth Executive",
+    subRole: "Fingpay (Tapits Technologies)",
     org: "Tapits Technologies (Fingpay)",
     title: "Marketing & Growth Executive",
-    phone: "+919131633921",
-    displayPhone: "+91 9131633921",
+    phone: "+919770904289",
+    displayPhone: "+91 97709 04289",
     email: "Kamal@tapits.in",
-    personalEmail: "",
+    personalEmail: "Kparihar015@gmail.com",
     linkedIn: "https://www.linkedin.com/in/kamal-parihar",
     displayLinkedIn: "linkedin.com/in/kamal-parihar",
+    website: "https://www.fingpay.co.in",
+    displayWebsite: "fingpay.co.in",
+    portfolio: "",
+    displayPortfolio: "",
     initials: "KP",
     themeClass: "theme-fingpay",
     photoSrc: "assets/kamal_photo.jpg",
     logoSrc: "assets/fingpay_logo.jpg",
     logoFallback: "FINGPAY",
-    pin: "141120",
-    waMessage: "Hi Kamal, great connecting with you at Global Fintech Fest 2026! Let's connect regarding Tapits / Fingpay."
-  },
-  mahavir: {
-    id: "mahavir",
-    name: "Mahavir Galve",
-    headline: "Lead Fintech Solutions at NBBL",
-    org: "NPCI Bharat BillPay Limited (NBBL)",
-    title: "Lead Fintech Solutions",
-    phone: "+918390079634",
-    displayPhone: "+91 83900 79634",
-    email: "mahavir.galve@npci.org.in",
-    personalEmail: "",
-    linkedIn: "https://www.linkedin.com/in/mahavirgalve/",
-    displayLinkedIn: "linkedin.com/in/mahavirgalve",
-    initials: "MG",
-    themeClass: "theme-npci",
-    photoSrc: "assets/mahavir_photo.jpg",
-    logoSrc: "assets/npci_logo.svg",
-    logoFallback: "NPCI / NBBL",
-    pin: "0000",
-    waMessage: "Hi Mahavir, great connecting with you at Global Fintech Fest 2026! Let's connect regarding NBBL Fintech Solutions."
+    waMessage: "Hi Kamal, great connecting with you! Let's stay connected."
   }
 };
 
 let currentProfile = PROFILES.abhigya;
-let isUnlocked = false;
+let isFlipped = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Register Service Worker for 100% Offline-First support
+  // Register Service Worker for Offline-First support
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').then(() => {
-      console.log("Service Worker registered successfully for offline support.");
+      console.log("Service Worker registered.");
     }).catch((err) => {
       console.log("Service worker registration failed:", err);
     });
@@ -105,542 +73,347 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const ALIASES = {
     abhigya: "abhigya", ak: "abhigya",
-    rishi: "rishi", rr: "rishi",
-    mahavir: "mahavir", mg: "mahavir",
     kamal: "kamal", kp: "kamal"
   };
 
-  const targetId = ALIASES[rawParam] || (PROFILES[rawParam] ? rawParam : "abhigya");
-  currentProfile = PROFILES[targetId] || PROFILES.abhigya;
+  const isKamalPage = window.location.pathname.toLowerCase().includes("kamal");
+  const defaultId = isKamalPage ? "kamal" : (window.DEFAULT_PROFILE_ID || "abhigya");
 
-  // Admin query param toggle
-  if (urlParams.get("admin") === "true" || urlParams.get("owner") === "true") {
+  const targetId = ALIASES[rawParam] || (PROFILES[rawParam] ? rawParam : defaultId);
+  currentProfile = PROFILES[targetId] || PROFILES[defaultId] || PROFILES.abhigya;
+
+  if (urlParams.get("admin") === "true" || urlParams.get("switch") === "true") {
     const selBox = document.getElementById("profileSelectorBox");
     if (selBox) selBox.style.display = "block";
   }
 
   syncProfileSelectors(currentProfile.id);
   renderProfileCard(currentProfile);
+
+  // Keyboard shortcut (Escape to flip back)
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && isFlipped) {
+      toggleCardFlip();
+    }
+  });
 });
 
 function syncProfileSelectors(profileId) {
   const topSel = document.getElementById("profileSelect");
-  const drawerSel = document.getElementById("drawerProfileSelect");
   if (topSel) topSel.value = profileId;
-  if (drawerSel) drawerSel.value = profileId;
 }
 
 function switchProfile(profileId) {
   if (PROFILES[profileId]) {
     currentProfile = PROFILES[profileId];
-    isUnlocked = false;
+    if (isFlipped) toggleCardFlip();
     syncProfileSelectors(profileId);
     renderProfileCard(currentProfile);
-    showToast(`Loaded ${currentProfile.name}'s Pass`);
+    showToast(`Loaded ${currentProfile.name}'s Card`);
   }
 }
 
 function renderProfileCard(prof) {
-  // Body Theme Class
-  document.body.className = prof.themeClass;
+  document.body.className = `${prof.themeClass} grey-theme`;
 
   // Name & Headline
   document.getElementById("profName").textContent = prof.name;
   document.getElementById("profHeadline").textContent = prof.headline;
+  document.getElementById("qrName").textContent = prof.name;
 
-  // Organization
-  const orgEl = document.getElementById("profOrg");
-  if (prof.org) {
-    orgEl.style.display = "block";
-    orgEl.innerHTML = `<i class="fa-solid fa-building-columns"></i> ${prof.org}`;
-  } else {
-    orgEl.style.display = "none";
+  const statusTxt = document.getElementById("statusBadgeText");
+  if (statusTxt) {
+    statusTxt.textContent = prof.id === "kamal" ? "Marketing & Growth | Fingpay" : (prof.subRole || "Founding Member @ Nerds");
   }
 
-  // Render Photo or Initials
+  const qrRole = document.getElementById("qrRole");
+  const qrSubRole = document.getElementById("qrSubRole");
+  if (qrRole) qrRole.textContent = prof.role || "Marketing & Growth Executive";
+  if (qrSubRole) qrSubRole.textContent = prof.id === "kamal" ? "Fingpay (Tapits Technologies)" : (prof.subRole || "Founding Member @ Nerds");
+
+  // Hero Photo
   const photoImg = document.getElementById("profilePhotoImg");
-  const initialsSpan = document.getElementById("heroInitials");
-
-  if (prof.photoSrc) {
+  if (photoImg && prof.photoSrc) {
     photoImg.src = prof.photoSrc;
-    photoImg.style.display = "block";
-    initialsSpan.style.display = "none";
-  } else {
-    photoImg.style.display = "none";
-    initialsSpan.style.display = "block";
-    initialsSpan.textContent = prof.initials;
+    photoImg.alt = prof.name;
   }
 
-  // Render Logo Box (In Portrait Row)
-  const logoBox = document.getElementById("logoBox");
-  const logoImg = document.getElementById("compLogoImg");
-  const logoFallback = document.getElementById("compLogoFallback");
-
+  // Company Logo Badge
+  const compImg = document.getElementById("compLogoImg");
+  const compFallback = document.getElementById("compLogoFallback");
+  
   if (prof.logoSrc) {
-    logoBox.style.display = "flex";
-    logoImg.src = prof.logoSrc;
-    logoImg.style.display = "block";
-    logoFallback.style.display = "none";
-    logoImg.onerror = function() {
-      if (prof.logoFallback) {
-        this.style.display = "none";
-        logoFallback.style.display = "block";
-        logoFallback.textContent = prof.logoFallback;
-      } else {
-        logoBox.style.display = "none";
-      }
-    };
-  } else if (prof.logoFallback) {
-    logoBox.style.display = "flex";
-    logoImg.style.display = "none";
-    logoFallback.style.display = "block";
-    logoFallback.textContent = prof.logoFallback;
+    compImg.src = prof.logoSrc;
+    compImg.alt = prof.org;
+    compImg.style.display = "block";
+    compFallback.style.display = "none";
   } else {
-    logoBox.style.display = "none";
+    compImg.style.display = "none";
+    compFallback.textContent = prof.logoFallback;
+    compFallback.style.display = "block";
   }
 
-  // Render Info Tags (if any exist)
-  const tagsContainer = document.getElementById("infoTags");
-  if (tagsContainer) {
-    if (prof.tags && prof.tags.length > 0) {
-      tagsContainer.style.display = "flex";
-      tagsContainer.innerHTML = prof.tags.map(t => `
-        <span class="tag"><i class="${t.icon}"></i> ${escapeHtml(t.text)}</span>
-      `).join('');
+  // WhatsApp Link
+  const waBtn = document.getElementById("btnWhatsapp");
+  if (waBtn) {
+    const cleanPhone = prof.phone.replace(/[^0-9]/g, "");
+    waBtn.href = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(prof.waMessage)}`;
+  }
+
+  // LinkedIn
+  const liBtn = document.getElementById("btnLinkedIn");
+  const dispLI = document.getElementById("dispLinkedIn");
+  if (liBtn && dispLI) {
+    liBtn.href = prof.linkedIn;
+    dispLI.textContent = prof.displayLinkedIn;
+  }
+
+  // Company Website Link
+  const webBtn = document.getElementById("btnWebsite");
+  const dispWeb = document.getElementById("dispWebsite");
+  const lblWeb = document.getElementById("lblWebsite");
+  if (webBtn && dispWeb) {
+    if (prof.website) {
+      webBtn.href = prof.website;
+      dispWeb.textContent = prof.displayWebsite;
+      if (lblWeb) lblWeb.textContent = prof.id === "kamal" ? "FINGPAY WEBSITE" : "NERDS WEBSITE";
+      webBtn.style.display = "flex";
     } else {
-      tagsContainer.style.display = "none";
+      webBtn.style.display = "none";
     }
   }
 
-  // Primary Actions
-  const cleanPhone = prof.phone.replace(/[^0-9+]/g, "");
-  const waUrl = `https://wa.me/${cleanPhone.replace("+", "")}?text=${encodeURIComponent(prof.waMessage)}`;
-  document.getElementById("btnWhatsapp").href = waUrl;
-
-  // Social & Web Links
-  document.getElementById("btnLinkedIn").href = prof.linkedIn;
-  document.getElementById("dispLinkedIn").textContent = prof.displayLinkedIn;
-
-  // Website Card
-  const websiteCard = document.getElementById("btnWebsite");
-  if (prof.website) {
-    websiteCard.style.display = "flex";
-    websiteCard.href = prof.website;
-    document.getElementById("dispWebsite").textContent = prof.displayWebsite || prof.website.replace(/^https?:\/\//, '');
-  } else {
-    websiteCard.style.display = "none";
+  // Personal Portfolio Link (Abhigya)
+  const portBtn = document.getElementById("btnPortfolio");
+  const dispPort = document.getElementById("dispPortfolio");
+  if (portBtn && dispPort) {
+    if (prof.portfolio) {
+      portBtn.href = prof.portfolio;
+      dispPort.textContent = prof.displayPortfolio;
+      portBtn.style.display = "flex";
+    } else {
+      portBtn.style.display = "none";
+    }
   }
 
-  // Primary Email
-  document.getElementById("dispEmail").textContent = prof.email;
-  document.getElementById("btnEmail").href = `mailto:${prof.email}`;
+  // Work Email
+  const btnEmail = document.getElementById("btnEmail");
+  const dispEmail = document.getElementById("dispEmail");
+  const btnCopyEmail = document.getElementById("btnCopyEmail");
+  if (dispEmail) dispEmail.textContent = prof.email;
+  if (btnEmail) {
+    btnEmail.onclick = (e) => handleEmailClick(e, prof.email);
+  }
+  if (btnCopyEmail) {
+    btnCopyEmail.onclick = (e) => copyToClipboard(e, prof.email, "Work email copied!");
+  }
 
   // Personal Email
-  const personalEmailCard = document.getElementById("btnEmailPersonal");
-  if (prof.personalEmail) {
-    personalEmailCard.style.display = "flex";
-    document.getElementById("dispEmailPersonal").textContent = prof.personalEmail;
-    personalEmailCard.href = `mailto:${prof.personalEmail}`;
-    document.getElementById("lblEmail").textContent = "Work Email";
-  } else {
-    personalEmailCard.style.display = "none";
-    document.getElementById("lblEmail").textContent = "Email";
+  const pEmailBtn = document.getElementById("btnEmailPersonal");
+  const dispPEmail = document.getElementById("dispEmailPersonal");
+  const btnCopyPEmail = document.getElementById("btnCopyPEmail");
+  if (pEmailBtn && dispPEmail) {
+    if (prof.personalEmail) {
+      dispPEmail.textContent = prof.personalEmail;
+      pEmailBtn.onclick = (e) => handleEmailClick(e, prof.personalEmail);
+      if (btnCopyPEmail) {
+        btnCopyPEmail.onclick = (e) => copyToClipboard(e, prof.personalEmail, "Personal email copied!");
+      }
+      pEmailBtn.style.display = "flex";
+    } else {
+      pEmailBtn.style.display = "none";
+    }
   }
 
   // Phone
-  document.getElementById("btnPhone").href = `tel:${cleanPhone}`;
-  document.getElementById("dispPhone").textContent = prof.displayPhone;
+  const btnPhone = document.getElementById("btnPhone");
+  const dispPhone = document.getElementById("dispPhone");
+  const btnCopyPhone = document.getElementById("btnCopyPhone");
+  if (dispPhone) dispPhone.textContent = prof.displayPhone;
+  if (btnPhone) {
+    btnPhone.onclick = (e) => handlePhoneClick(e, prof.phone);
+  }
+  if (btnCopyPhone) {
+    btnCopyPhone.onclick = (e) => copyToClipboard(e, prof.phone, "Phone number copied!");
+  }
 
-  // Owner Notes Label
-  document.getElementById("ownerBtnLabel").textContent = `${prof.name.split(' ')[0]}'s Notes`;
+  // Generate Bulletproof QR Code
+  generateQrCode(window.location.href);
 }
 
-// Download / Save vCard to Contacts (iOS & Android Web Share Support)
+/* ==========================================================================
+   CARD FLIP ENGINE
+   ========================================================================== */
+function toggleCardFlip() {
+  const cardInner = document.getElementById("cardInner");
+  if (!cardInner) return;
+  
+  isFlipped = !isFlipped;
+  if (isFlipped) {
+    cardInner.classList.add("flipped");
+  } else {
+    cardInner.classList.remove("flipped");
+  }
+}
+
+/* ==========================================================================
+   BULLETPROOF QR CODE GENERATOR ENGINE (Dual Fallback)
+   ========================================================================== */
+function generateQrCode(text) {
+  const qrContainer = document.getElementById("qrcode");
+  if (!qrContainer) return;
+  qrContainer.innerHTML = "";
+
+  try {
+    if (typeof QRCode !== "undefined") {
+      new QRCode(qrContainer, {
+        text: text,
+        width: 210,
+        height: 210,
+        colorDark: "#06142e",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    } else {
+      useFallbackQrImage(qrContainer, text);
+    }
+  } catch (err) {
+    console.warn("QRCode library rendering failed, using high-res QRServer fallback:", err);
+    useFallbackQrImage(qrContainer, text);
+  }
+}
+
+function useFallbackQrImage(container, text) {
+  const qrImg = document.createElement("img");
+  qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(text)}&margin=10`;
+  qrImg.alt = "Digital Pass QR Code";
+  qrImg.style.width = "100%";
+  qrImg.style.height = "100%";
+  qrImg.style.borderRadius = "12px";
+  container.appendChild(qrImg);
+}
+
+/* ==========================================================================
+   vCard Generation & Sharing (vCard 3.0 Standard)
+   ========================================================================== */
 function downloadVCard() {
   const p = currentProfile;
-  const cleanPhone = p.phone.replace(/[^0-9+]/g, "");
-  
-  const vcardLines = [
+
+  const vCardContent = [
     "BEGIN:VCARD",
     "VERSION:3.0",
-    `N:${p.name.split(' ').reverse().join(';')};;;`,
     `FN:${p.name}`,
-    p.org ? `ORG:${p.org}` : "",
-    `TITLE:${p.title || p.headline}`,
-    `TEL;TYPE=CELL,VOICE:${cleanPhone}`,
-    `EMAIL;TYPE=WORK,INTERNET:${p.email}`,
+    `N:${p.name.split(" ").slice(-1)[0]};${p.name.split(" ").slice(0, -1).join(" ")};;;`,
+    `ORG:${p.org}`,
+    `TITLE:${p.title}`,
+    `TEL;TYPE=CELL,VOICE:${p.phone}`,
+    `EMAIL;TYPE=WORK:${p.email}`,
     p.personalEmail ? `EMAIL;TYPE=HOME,INTERNET:${p.personalEmail}` : "",
-    `URL:${p.linkedIn}`,
-    p.website ? `URL;TYPE=WORK:${p.website}` : "",
-    "NOTE:Met at Global Fintech Fest 2026 (GFF 2026).",
+    `URL;TYPE=WORK:${p.website || ""}`,
+    p.portfolio ? `URL;TYPE=PERSONAL:${p.portfolio}` : "",
+    `URL;TYPE=LINKEDIN:${p.linkedIn}`,
+    `NOTE:Digital Business Card - ${p.name}`,
     "END:VCARD"
-  ].filter(Boolean);
+  ].filter(Boolean).join("\r\n");
 
-  const vcardText = vcardLines.join("\r\n");
-  const blob = new Blob([vcardText], { type: "text/vcard;charset=utf-8" });
-  const filename = `${p.name.replace(/\s+/g, '_')}_GFF2026.vcf`;
+  const blob = new Blob([vCardContent], { type: "text/vcard;charset=utf-8;" });
+  const filename = `${p.name.replace(/\s+/g, "_")}_Contact.vcf`;
 
-  // Native Web Share API for Mobile Devices (iPhone & Android)
-  if (navigator.canShare && navigator.share && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-    try {
-      const file = new File([blob], filename, { type: "text/vcard" });
-      if (navigator.canShare({ files: [file] })) {
-        navigator.share({
-          files: [file],
-          title: p.name,
-          text: `Contact card for ${p.name} (GFF 2026)`
-        }).then(() => {
-          showToast("Contact card shared!");
-        }).catch((err) => {
-          if (err.name !== 'AbortError') fallbackDownload(blob, filename);
-        });
-        return;
-      }
-    } catch (e) {
-      console.log("Web share failed, using fallback:", e);
-    }
-  }
-
-  fallbackDownload(blob, filename);
-}
-
-function fallbackDownload(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.setAttribute("download", filename);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  showToast("Contact card saved! Open to import.");
-}
-
-// Owner PIN Auth Logic
-function openOwnerAuthModal() {
-  if (isUnlocked) {
-    openNotesDrawer();
-    return;
-  }
-  document.getElementById("pinOwnerName").textContent = currentProfile.name;
-  document.getElementById("ownerPinInput").value = "";
-  document.getElementById("authModal").classList.add("active");
-  setTimeout(() => document.getElementById("ownerPinInput").focus(), 100);
-}
-
-function closeAuthModal() {
-  document.getElementById("authModal").classList.remove("active");
-}
-
-function verifyPin() {
-  const inputPin = document.getElementById("ownerPinInput").value.trim();
-  if (inputPin === currentProfile.pin) {
-    isUnlocked = true;
-    closeAuthModal();
-    openNotesDrawer();
-    showToast(`Unlocked ${currentProfile.name}'s Notes`);
+  if (navigator.canShare && navigator.canShare({ files: [new File([blob], filename, { type: "text/vcard" })] })) {
+    const file = new File([blob], filename, { type: "text/vcard" });
+    navigator.share({
+      files: [file],
+      title: `${p.name} Contact Card`,
+      text: `Save ${p.name}'s contact card`
+    }).catch(() => {
+      triggerDirectDownload(blob, filename);
+    });
   } else {
-    showToast(`Incorrect PIN for ${currentProfile.name}`);
+    triggerDirectDownload(blob, filename);
   }
 }
 
-let activeVaultTab = "leads";
+function triggerDirectDownload(blob, filename) {
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+  showToast("Contact card downloaded!");
+}
 
-function switchVaultTab(tabName) {
-  activeVaultTab = tabName;
-  const tabLeads = document.getElementById("tabBtnLeads");
-  const tabThoughts = document.getElementById("tabBtnThoughts");
-  const contentLeads = document.getElementById("tabContentLeads");
-  const contentThoughts = document.getElementById("tabContentThoughts");
+/* Helper Email & Phone Click */
+function handleEmailClick(e, email) {
+  if (e.target.closest(".copy-icon-btn")) return;
+  window.location.href = `mailto:${email}`;
+}
 
-  if (tabName === "leads") {
-    if (tabLeads) tabLeads.classList.add("active");
-    if (tabThoughts) tabThoughts.classList.remove("active");
-    if (contentLeads) contentLeads.style.display = "block";
-    if (contentThoughts) contentThoughts.style.display = "none";
-    renderNotes();
+function handlePhoneClick(e, phone) {
+  if (e.target.closest(".copy-icon-btn")) return;
+  window.location.href = `tel:${phone}`;
+}
+
+/* Clipboard Helper & Toast Notifications */
+function copyToClipboard(event, text, successMsg) {
+  if (event) event.stopPropagation();
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(successMsg || "Copied to clipboard!");
+    }).catch(() => {
+      fallbackCopyTextToClipboard(text, successMsg);
+    });
   } else {
-    if (tabThoughts) tabThoughts.classList.add("active");
-    if (tabLeads) tabLeads.classList.remove("active");
-    if (contentThoughts) contentThoughts.style.display = "block";
-    if (contentLeads) contentLeads.style.display = "none";
-    renderThoughts();
+    fallbackCopyTextToClipboard(text, successMsg);
   }
 }
 
-function openNotesDrawer() {
-  document.getElementById("drawerOwnerTitle").textContent = `${currentProfile.name}'s Vault`;
-  switchVaultTab(activeVaultTab || 'leads');
-  document.getElementById("notesDrawer").classList.add("active");
+function fallbackCopyTextToClipboard(text, successMsg) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.opacity = "0";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand("copy");
+    showToast(successMsg || "Copied to clipboard!");
+  } catch (err) {
+    showToast("Failed to copy");
+  }
+  document.body.removeChild(textArea);
 }
 
-function closeNotesDrawer() {
-  document.getElementById("notesDrawer").classList.remove("active");
-}
-
-// QR Code Modal
-function openQrModal() {
-  const modal = document.getElementById("qrModal");
-  const qrContainer = document.getElementById("qrcode");
-  const modalSub = document.getElementById("qrModalSub");
-  const qrUrlText = document.getElementById("qrUrlText");
-
-  modalSub.textContent = currentProfile.name;
-  const currentUrl = `${window.location.origin}${window.location.pathname}?profile=${currentProfile.id}`;
-  qrUrlText.textContent = currentUrl;
-
-  qrContainer.innerHTML = "";
-  new QRCode(qrContainer, {
-    text: currentUrl,
-    width: 190,
-    height: 190,
-    colorDark: "#0f172a",
-    colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.H
-  });
-
-  modal.classList.add("active");
-}
-
-function closeQrModal() {
-  document.getElementById("qrModal").classList.remove("active");
-}
-
-function copyProfileUrl() {
-  const currentUrl = `${window.location.origin}${window.location.pathname}?profile=${currentProfile.id}`;
-  navigator.clipboard.writeText(currentUrl).then(() => showToast("Pass link copied!"));
-}
-
-function copyToClipboard(event, text, msg) {
-  event.preventDefault();
-  event.stopPropagation();
-  navigator.clipboard.writeText(text).then(() => showToast(msg));
-}
-
-function showToast(msg) {
-  const toast = document.getElementById("toast");
-  document.getElementById("toastMsg").textContent = msg;
-  toast.classList.add("active");
-  setTimeout(() => toast.classList.remove("active"), 2500);
-}
-
-// LocalStorage Notes Management
-function getStorageKey() {
-  return `gff_notes_v2_${currentProfile.id}`;
-}
-
-function getNotes() {
-  const stored = localStorage.getItem(getStorageKey());
-  return stored ? JSON.parse(stored) : [];
-}
-
-function saveNote(e) {
+/* Self-Intro WhatsApp Connect */
+function buildWaIntroLink(e) {
   e.preventDefault();
-  const name = document.getElementById("leadName").value.trim();
-  const company = document.getElementById("leadCompany").value.trim();
-  const contact = document.getElementById("leadContact").value.trim();
-  const tag = document.getElementById("leadTag").value;
-  const notes = document.getElementById("leadNotes").value.trim();
-
-  if (!name || !company) return;
-
-  const newNote = {
-    id: Date.now(),
-    name,
-    company,
-    contact,
-    tag,
-    notes,
-    date: new Date().toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  };
-
-  const currentNotes = getNotes();
-  currentNotes.unshift(newNote);
-  localStorage.setItem(getStorageKey(), JSON.stringify(currentNotes));
-
-  document.getElementById("noteForm").reset();
-  renderNotes();
-  showToast(`Note saved for ${name}`);
+  const input = document.getElementById("waIntroInput");
+  const introText = (input ? input.value.trim() : "");
+  const p = currentProfile;
+  const cleanPhone = p.phone.replace(/[^0-9]/g, "");
+  const base = `Hi Abhigya, great connecting with you! Let's catch up and stay connected.`;
+  const fullMsg = introText ? `${introText} — ${base}` : base;
+  const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(fullMsg)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
 }
 
-function renderNotes() {
-  const notes = getNotes();
-  const search = (document.getElementById("crmSearch").value || "").toLowerCase();
-  const listContainer = document.getElementById("notesList");
-  document.getElementById("notesCount").textContent = notes.length;
-
-  const filtered = notes.filter(n =>
-    n.name.toLowerCase().includes(search) ||
-    n.company.toLowerCase().includes(search) ||
-    n.tag.toLowerCase().includes(search) ||
-    (n.notes && n.notes.toLowerCase().includes(search))
-  );
-
-  if (filtered.length === 0) {
-    listContainer.innerHTML = `
-      <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem;">
-        <i class="fa-solid fa-folder-open" style="font-size: 2rem; margin-bottom: 8px; color: var(--text-light);"></i>
-        <p>No notes logged for ${currentProfile.name} yet.</p>
-      </div>
-    `;
-    return;
+function showToast(message) {
+  let toast = document.getElementById("appToast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "appToast";
+    toast.className = "app-toast";
+    toast.setAttribute("role", "status");
+    toast.setAttribute("aria-live", "polite");
+    document.body.appendChild(toast);
   }
-
-  listContainer.innerHTML = filtered.map(n => `
-    <div class="note-item">
-      <div class="note-item-header">
-        <div>
-          <div class="note-item-name">${escapeHtml(n.name)}</div>
-          <div class="note-item-company"><i class="fa-solid fa-building"></i> ${escapeHtml(n.company)}</div>
-        </div>
-        <span class="note-tag">${escapeHtml(n.tag)}</span>
-      </div>
-      ${n.contact ? `<div style="font-size: 0.78rem; color: var(--text-muted);"><i class="fa-solid fa-address-book"></i> ${escapeHtml(n.contact)}</div>` : ''}
-      ${n.notes ? `<div style="font-size: 0.82rem; color: var(--text-dark); margin-top: 4px;">${escapeHtml(n.notes)}</div>` : ''}
-      <div style="font-size: 0.72rem; color: var(--text-light); margin-top: 4px;">${n.date}</div>
-    </div>
-  `).join('');
-}
-
-// Export Notes to CSV File (Supports 200+ Leads)
-function exportNotesToCSV() {
-  const notes = getNotes();
-  if (notes.length === 0) {
-    showToast("No notes to export yet!");
-    return;
-  }
-
-  const headers = ["Name", "Company", "Contact", "Topic", "Notes", "Date"];
-  const rows = notes.map(n => [
-    `"${(n.name || '').replace(/"/g, '""')}"`,
-    `"${(n.company || '').replace(/"/g, '""')}"`,
-    `"${(n.contact || '').replace(/"/g, '""')}"`,
-    `"${(n.tag || '').replace(/"/g, '""')}"`,
-    `"${(n.notes || '').replace(/"/g, '""')}"`,
-    `"${(n.date || '').replace(/"/g, '""')}"`
-  ]);
-
-  const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.setAttribute("download", `${currentProfile.name.replace(/\s+/g, '_')}_GFF2026_Leads.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-
-  showToast(`Exported ${notes.length} leads to CSV!`);
-}
-
-// LocalStorage Quick Thoughts & Key Points Management
-function getThoughtsStorageKey() {
-  return `gff_thoughts_v1_${currentProfile.id}`;
-}
-
-function getThoughts() {
-  const stored = localStorage.getItem(getThoughtsStorageKey());
-  return stored ? JSON.parse(stored) : [];
-}
-
-function saveThought(e) {
-  e.preventDefault();
-  const title = document.getElementById("thoughtTitle").value.trim();
-  const desc = document.getElementById("thoughtDesc").value.trim();
-
-  if (!title || !desc) return;
-
-  const newThought = {
-    id: Date.now(),
-    title,
-    desc,
-    date: new Date().toLocaleDateString('en-IN', {
-      day: 'numeric',
-      month: 'short',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  };
-
-  const currentThoughts = getThoughts();
-  currentThoughts.unshift(newThought);
-  localStorage.setItem(getThoughtsStorageKey(), JSON.stringify(currentThoughts));
-
-  document.getElementById("thoughtForm").reset();
-  renderThoughts();
-  showToast(`Thought saved!`);
-}
-
-function renderThoughts() {
-  const thoughts = getThoughts();
-  const searchInput = document.getElementById("thoughtSearch");
-  const search = searchInput ? (searchInput.value || "").toLowerCase() : "";
-  const listContainer = document.getElementById("thoughtsList");
-  const countEl = document.getElementById("thoughtsCount");
-  if (countEl) countEl.textContent = thoughts.length;
-
-  if (!listContainer) return;
-
-  const filtered = thoughts.filter(t =>
-    t.title.toLowerCase().includes(search) ||
-    t.desc.toLowerCase().includes(search)
-  );
-
-  if (filtered.length === 0) {
-    listContainer.innerHTML = `
-      <div style="text-align: center; padding: 24px; color: var(--text-muted); font-size: 0.85rem;">
-        <i class="fa-solid fa-lightbulb" style="font-size: 2rem; margin-bottom: 8px; color: var(--text-light);"></i>
-        <p>No thoughts or key points logged for ${currentProfile.name} yet.</p>
-      </div>
-    `;
-    return;
-  }
-
-  listContainer.innerHTML = filtered.map(t => `
-    <div class="note-item">
-      <div class="note-item-header">
-        <div class="note-item-name"><i class="fa-solid fa-heading" style="color: var(--brand-primary); margin-right: 4px;"></i> ${escapeHtml(t.title)}</div>
-        <span class="note-tag" style="background: var(--brand-light-bg); color: var(--brand-primary);">${t.date}</span>
-      </div>
-      <div style="font-size: 0.84rem; color: var(--text-dark); margin-top: 6px; white-space: pre-wrap; line-height: 1.4;">${escapeHtml(t.desc)}</div>
-    </div>
-  `).join('');
-}
-
-function exportThoughtsToCSV() {
-  const thoughts = getThoughts();
-  if (thoughts.length === 0) {
-    showToast("No thoughts to export yet!");
-    return;
-  }
-
-  const headers = ["Topic / Title", "Description / Key Points", "Date"];
-  const rows = thoughts.map(t => [
-    `"${(t.title || '').replace(/"/g, '""')}"`,
-    `"${(t.desc || '').replace(/"/g, '""')}"`,
-    `"${(t.date || '').replace(/"/g, '""')}"`
-  ]);
-
-  const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.setAttribute("download", `${currentProfile.name.replace(/\s+/g, '_')}_GFF2026_Thoughts.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(url);
-
-  showToast(`Exported ${thoughts.length} thoughts to CSV!`);
-}
-
-function escapeHtml(str) {
-  return (str || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  toast.textContent = message;
+  toast.classList.add("show");
+  
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2600);
 }

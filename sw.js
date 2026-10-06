@@ -1,22 +1,16 @@
 /* ==========================================================================
-   GFF 2026 Digital Pass - Ultra Fast Offline & Poor Network Service Worker
+   Executive Digital Card - Service Worker (v25 Light Luxury & Bulletproof QR)
    ========================================================================== */
 
-const CACHE_NAME = "gff-pass-cache-v15";
+const CACHE_NAME = "executive-card-cache-v25";
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
-  "./export.html",
-  "./styles.css",
-  "./app.js",
+  "./styles.css?v=25",
+  "./app.js?v=25",
+  "./manifest.json",
   "./assets/abhigya_photo.jpg",
-  "./assets/rishi_photo.jpg",
   "./assets/kamal_photo.jpg",
-  "./assets/mahavir_photo.jpg",
-  "./assets/gff_banner.png",
-  "./assets/gff_banner.jpg",
-  "./assets/npci_logo.svg",
-  "./assets/npci_logo.png",
   "./assets/fingpay_logo.jpg",
   "./assets/nerds_logo.png",
   "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap",
@@ -24,7 +18,6 @@ const ASSETS_TO_CACHE = [
   "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
 ];
 
-// Install Event - Pre-cache all core assets & immediate skipWaiting
 self.addEventListener("install", (e) => {
   self.skipWaiting();
   e.waitUntil(
@@ -34,7 +27,6 @@ self.addEventListener("install", (e) => {
   );
 });
 
-// Activate Event - Clean all old caches and claim clients immediately
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys().then((keys) => {
@@ -49,7 +41,6 @@ self.addEventListener("activate", (e) => {
   );
 });
 
-// Fetch Event - Instant 0ms Cache-First with Background Revalidation for Poor Connection
 self.addEventListener("fetch", (e) => {
   if (e.request.method !== "GET") return;
 
@@ -65,11 +56,7 @@ self.addEventListener("fetch", (e) => {
         return networkResponse;
       }).catch(() => cachedResponse);
 
-      // Return cached asset instantly for 0ms load speed if network is slow/offline
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetchPromise;
+      return cachedResponse || fetchPromise;
     })
   );
 });
