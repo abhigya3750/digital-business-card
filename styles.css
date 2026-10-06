@@ -658,28 +658,28 @@ body.theme-fingpay .comp-logo-img {
    Kamal Parihar (theme-fingpay) Custom Tilted QR Pass Alignment
    ========================================================================== */
 body.theme-fingpay .qr-pass-body {
-  top: 54%;
-  left: 10%;
-  right: 24%;
-  transform: translateY(-50%) rotate(-5.8deg);
+  top: 55.5%;
+  left: 5%;
+  right: 29%;
+  transform: translateY(-50%) rotate(-9.5deg);
   transform-origin: center center;
-  gap: 5px;
+  gap: 4px;
 }
 
 body.theme-fingpay .qr-scan-me-pill {
   padding: 3px 10px;
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   letter-spacing: 0.5px;
 }
 
 body.theme-fingpay .qr-visual-frame {
-  padding: 7px;
-  border-radius: 14px;
+  padding: 6px;
+  border-radius: 12px;
 }
 
 body.theme-fingpay .qrcode-canvas-box {
-  width: min(160px, 75vw);
-  height: min(160px, 75vw);
+  width: min(150px, 70vw);
+  height: min(150px, 70vw);
 }
 
 body.theme-fingpay .qr-profile-meta {
@@ -687,15 +687,15 @@ body.theme-fingpay .qr-profile-meta {
 }
 
 body.theme-fingpay .qr-profile-meta h3 {
-  font-size: 1.14rem;
+  font-size: 1.10rem;
 }
 
 body.theme-fingpay .qr-role {
-  font-size: 0.82rem;
+  font-size: 0.80rem;
 }
 
 body.theme-fingpay .qr-subrole {
-  font-size: 0.74rem;
+  font-size: 0.72rem;
 }
 
 .qr-profile-meta p {
