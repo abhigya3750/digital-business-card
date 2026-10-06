@@ -659,9 +659,9 @@ body.theme-fingpay .comp-logo-img {
    ========================================================================== */
 body.theme-fingpay .qr-pass-body {
   top: 55.5%;
-  left: 5%;
-  right: 29%;
-  transform: translateY(-50%) rotate(-9.5deg);
+  left: 2%;
+  right: 32%;
+  transform: translateY(-50%) rotate(-7.5deg);
   transform-origin: center center;
   gap: 4px;
 }
