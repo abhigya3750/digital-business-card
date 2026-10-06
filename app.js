@@ -24,6 +24,7 @@ const PROFILES = {
     initials: "AK",
     themeClass: "theme-nerds",
     photoSrc: "assets/abhigya_photo.jpg",
+    qrBgSrc: "assets/qr_pass_bg.png",
     logoSrc: "assets/nerds_logo.png",
     logoFallback: "NERDS",
     waMessage: "Hi Abhigya, great connecting with you! Let's catch up and stay connected."
@@ -49,6 +50,7 @@ const PROFILES = {
     initials: "KP",
     themeClass: "theme-fingpay",
     photoSrc: "assets/kamal_photo.jpg",
+    qrBgSrc: "assets/kamal_qr_pass_bg.jpg",
     logoSrc: "assets/fingpay_logo.jpg",
     logoFallback: "FINGPAY",
     waMessage: "Hi Kamal, great connecting with you! Let's stay connected."
@@ -136,6 +138,13 @@ function renderProfileCard(prof) {
   if (photoImg && prof.photoSrc) {
     photoImg.src = prof.photoSrc;
     photoImg.alt = prof.name;
+  }
+
+  // QR Pass Card Back Background
+  const cardBack = document.querySelector(".card-back");
+  if (cardBack) {
+    const bgUrl = prof.qrBgSrc || "assets/qr_pass_bg.png";
+    cardBack.style.backgroundImage = `url('${bgUrl}')`;
   }
 
   // Company Logo Badge
