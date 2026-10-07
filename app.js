@@ -89,10 +89,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selBox) selBox.style.display = "block";
   }
 
+  // Determine initial view: phone camera QR scan (?view=profile) lands on Profile Card, direct link lands on QR Pass
+  const viewParam = (urlParams.get("view") || urlParams.get("v") || "").toLowerCase();
+  if (viewParam === "profile" || viewParam === "card" || viewParam === "about") {
+    isFlipped = false;
+  } else {
+    isFlipped = true;
+  }
+
   // Set initial flipped state on container
   const cardInner = document.getElementById("cardInner");
-  if (cardInner && isFlipped) {
-    cardInner.classList.add("flipped");
+  if (cardInner) {
+    if (isFlipped) {
+      cardInner.classList.add("flipped");
+    } else {
+      cardInner.classList.remove("flipped");
+    }
   }
   updateFlipButtonUI();
 
@@ -253,8 +265,11 @@ function renderProfileCard(prof) {
     btnCopyPhone.onclick = (e) => copyToClipboard(e, prof.phone, "Phone number copied!");
   }
 
-  // Generate Bulletproof QR Code
-  generateQrCode(window.location.href);
+  // Generate Bulletproof QR Code (Encodes ?view=profile so scanning with phone camera opens the Profile Card directly)
+  const currentOrigin = window.location.origin;
+  const basePath = prof.id === "kamal" ? "/kamal" : "/";
+  const targetScanUrl = `${currentOrigin}${basePath}?view=profile`;
+  generateQrCode(targetScanUrl);
 }
 
 /* ==========================================================================
