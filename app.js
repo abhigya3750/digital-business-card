@@ -58,7 +58,7 @@ const PROFILES = {
 };
 
 let currentProfile = PROFILES.abhigya;
-let isFlipped = false;
+let isFlipped = true; // Opens directly on QR Pass view by default
 
 document.addEventListener("DOMContentLoaded", () => {
   // Register Service Worker for Offline-First support
@@ -88,6 +88,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const selBox = document.getElementById("profileSelectorBox");
     if (selBox) selBox.style.display = "block";
   }
+
+  // Set initial flipped state on container
+  const cardInner = document.getElementById("cardInner");
+  if (cardInner && isFlipped) {
+    cardInner.classList.add("flipped");
+  }
+  updateFlipButtonUI();
 
   syncProfileSelectors(currentProfile.id);
   renderProfileCard(currentProfile);
@@ -262,6 +269,21 @@ function toggleCardFlip() {
     cardInner.classList.add("flipped");
   } else {
     cardInner.classList.remove("flipped");
+  }
+  updateFlipButtonUI();
+}
+
+function updateFlipButtonUI() {
+  const icon = document.getElementById("iconToggleFlip");
+  const text = document.getElementById("textToggleFlip");
+  if (!text) return;
+  
+  if (isFlipped) {
+    text.textContent = "Profile";
+    if (icon) icon.className = "fa-solid fa-id-card";
+  } else {
+    text.textContent = "QR Pass";
+    if (icon) icon.className = "fa-solid fa-qrcode";
   }
 }
 

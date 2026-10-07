@@ -49,10 +49,10 @@
         </select>
       </div>
 
-      <!-- Quick Action QR Scanner Toggle -->
-      <button class="qr-pill-btn" onclick="toggleCardFlip()" title="Show Profile QR Code" aria-label="Show Profile QR Code">
-        <i class="fa-solid fa-qrcode"></i>
-        <span>Scan QR</span>
+      <!-- Quick Action View Switcher Toggle (Profile <-> QR Pass) -->
+      <button class="qr-pill-btn" id="btnToggleFlip" onclick="toggleCardFlip()" title="Toggle View" aria-label="Toggle View">
+        <i class="fa-solid fa-id-card" id="iconToggleFlip"></i>
+        <span id="textToggleFlip">Profile</span>
       </button>
     </header>
 
